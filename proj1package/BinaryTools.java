@@ -1,3 +1,5 @@
+package proj1package;
+
 /*
 CSC 172 Project 1
 Class BinaryTools
@@ -53,22 +55,22 @@ public class BinaryTools {
 	}
 	public static String shiftIt(String binaryInput) {
 		// moves the last element of the binary string to the beginning
-		int n = binaryInputlength();
+		int n = binaryInput.length();
 		StringBuilder binaryOut = new StringBuilder();
 		binaryOut.append(binaryInput.charAt(n-1));
-		binaryOut.append(binaryInput.substring(1));
+		binaryOut.append(binaryInput.substring(0, n-1));
 		return binaryOut.toString();		
 	}
 	public static String permuteIt(String binaryInput) {
 		// uses permutation P to reorganize elements in a 32-bit binary string
-		if (binaryInput.length() != P.length()) return null;
-		StringBuilder binaryOut = new StringBuilder();
-		for (int i = 0; i < P.length(); i++) {
-			binaryOut.setCharAt(P[i], binaryInput.charAt(i));
+		if (binaryInput.length() != P.length) return null;
+		char[] binaryOut = new char[P.length];
+		for (int i = 0; i < P.length; i++) {
+			binaryOut[P[i] - 1] = binaryInput.charAt(i);
 		}
-		return binaryOut.toString();
+		return String.valueOf(binaryOut);
 	}
-	public static String SubstitutionS(binaryInput) {
+	public static String SubstitutionS(String binaryInput) {
 		// uses the substitution box to output a binary string using the first and last 4 bits in an 8-bit binary string
 		int row = Integer.parseInt(binaryInput.substring(0, 3), 2);
 		int column = Integer.parseInt(binaryInput.substring(4, 7), 2);
