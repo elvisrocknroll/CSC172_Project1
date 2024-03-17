@@ -32,7 +32,7 @@ public class EncryptionTools {
 		return L1 + R1;
 	}
 	public static String encryptBlock(String block, String inputKey) {
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 10; i++) {
 			inputKey = keyScheduleTransform(inputKey);
 			block = encryptBlockRound(block, inputKey);
 		}
