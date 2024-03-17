@@ -42,7 +42,9 @@ public class BinaryTools {
 		// custom XOR gate evaluated between two binary strings
 		StringBuilder binaryOut = new StringBuilder();
 		int n = binary1.length();
-		if (n != binary2.length()) return null;
+		if (n != binary2.length()) {
+			Troubleshooting.mismatchedError(n, binary2.length());
+		}
 		for (int i = 0; i < n; i++) {
 			if (binary1.charAt(i) == binary2.charAt(i)) {
 				binaryOut.append("0");
@@ -57,23 +59,44 @@ public class BinaryTools {
 		// moves the last element of the binary string to the beginning
 		int n = binaryInput.length();
 		StringBuilder binaryOut = new StringBuilder();
-		binaryOut.append(binaryInput.charAt(n-1));
-		binaryOut.append(binaryInput.substring(0, n-1));
+		binaryOut.append(binaryInput.substring(1, n));
+		binaryOut.append(binaryInput.charAt(0));
 		return binaryOut.toString();		
+	}
+	public static void permuteInt(int[] in) {
+		int[] out = new int[32];
+		for (int i = 0; i< 32; i++) {
+			out[P[i] - 1] = in[i];
+		}
+		for (int num : out) {
+			System.out.print(num + " ");
+		}
 	}
 	public static String permuteIt(String binaryInput) {
 		// uses permutation P to reorganize elements in a 32-bit binary string
-		if (binaryInput.length() != P.length) return null;
-		char[] binaryOut = new char[P.length];
-		for (int i = 0; i < P.length; i++) {
+		if (binaryInput.length() != P.length) {
+			Troubleshooting.stringTooLongError(binaryInput.length(), 32);
+		}
+		char[] binaryOut = new char[32];
+		for (int i = 0; i < 32; i++) {
 			binaryOut[P[i] - 1] = binaryInput.charAt(i);
+		}
+		return String.valueOf(binaryOut);
+	}
+	public static String unpermuteIt(String binaryInput) {
+		if (binaryInput.length() != P.length) {
+			Troubleshooting.stringTooLongError(binaryInput.length(), 32);
+		}
+		char[] binaryOut = new char[32];
+		for (int i = 0; i < 32; i++) {
+			binaryOut[i] = binaryInput.charAt(P[i] - 1);
 		}
 		return String.valueOf(binaryOut);
 	}
 	public static String SubstitutionS(String binaryInput) {
 		// uses the substitution box to output a binary string using the first and last 4 bits in an 8-bit binary string
-		int row = Integer.parseInt(binaryInput.substring(0, 3), 2);
-		int column = Integer.parseInt(binaryInput.substring(4, 7), 2);
+		int row = Integer.parseInt(binaryInput.substring(0, 4), 2);
+		int column = Integer.parseInt(binaryInput.substring(4, 8), 2);
 		return S[row][column];
 	}
 }
