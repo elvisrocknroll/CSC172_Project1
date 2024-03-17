@@ -21,6 +21,17 @@ public class EncryptionTools {
 			BinaryTools.SubstitutionS(xored.substring(24, 32));
 		return BinaryTools.permuteIt(binaryOut);
 	}
+	public static String unfunctionF(String rightHalf, String subkey) {
+		if (rightHalf.length() != subkey.length()) Troubleshooting.mismatchedError(rightHalf.length(), subkey.length());
+		if (rightHalf.length() != 32) Troubleshooting.stringTooLongError(rightHalf.length(), 32);
+		if (subkey.length() != 32) Troubleshooting.stringTooLongError(subkey.length(), 32);
+		String unperm = BinaryTools.unpermuteIt(rightHalf);
+		String unsub = BinaryTools.unSubstitutionS(unperm.substring(0, 8)) +
+			BinaryTools.unSubstitutionS(unperm.substring(8, 16)) +
+			BinaryTools.unSubstitutionS(unperm.substring(16, 24)) +
+			BinaryTools.unSubstitutionS(unperm.substring(24, 32));
+		return BinaryTools.unxorIt(unsub, subkey);
+	}
 	public static String encryptBlockRound(String block, String inputKey) {
 		// completes one round of encryption
 		if (block.length() != 64) Troubleshooting.stringTooLongError(block.length(), 64);
@@ -31,6 +42,15 @@ public class EncryptionTools {
 		String R1 = BinaryTools.xorIt(L0, functionF(R0, subkey));
 		return L1 + R1;
 	}
+	public static String decryptBlockRound(String block, String inputKey) {
+		if (block.length() != 64) Troubleshooting.stringTooLongError(block.length(), 64);
+		String L1 = block.substring(0, 32);
+		String R1 = block.substring(32, 64);
+		String subkey = inputKey.substring(0, 32);
+		String L0 = BinaryTools.unxorIt(R1, functionF(L1, subkey));
+		String R0 = L1;
+		return L0 + R0;
+	}
 	public static String encryptBlock(String block, String inputKey) {
 		for (int i = 0; i < 10; i++) {
 			inputKey = keyScheduleTransform(inputKey);
@@ -39,7 +59,15 @@ public class EncryptionTools {
 		return block;
 	}
 	public static String decryptBlock(String block, String inputKey) {
-		return null;
+		String[] keys = new String[10];
+		for (int i = 0; i < 10; i++) {
+			inputKey = keyScheduleTransform(inputKey);
+			keys[i] = inputKey;
+		}
+		for (int i = 9; i >= 0; i--) {
+			block = decryptBlockRound(block, keys[i]);
+		}
+		return block;
 	}
 	public static String keyScheduleTransform(String inputKey) {
 		// transforms key by left shifting both halves

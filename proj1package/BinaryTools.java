@@ -55,12 +55,37 @@ public class BinaryTools {
 		}
 		return binaryOut.toString();
 	}
+	public static String unxorIt(String xored, String key) {
+		StringBuilder binaryOut = new StringBuilder();
+		int n = xored.length();
+		if (n != xored.length()) {
+			Troubleshooting.mismatchedError(n, xored.length());
+		}
+		for (int i = 0; i < n; i++) {
+			switch (xored.charAt(i)) {
+			case '0':
+				binaryOut.append(key.charAt(i));
+				break;
+			case '1':
+				binaryOut.append((key.charAt(i) == '1') ? '0' : '1');
+				break;
+			}
+		}
+		return binaryOut.toString();
+	}
 	public static String shiftIt(String binaryInput) {
 		// moves the last element of the binary string to the beginning
 		int n = binaryInput.length();
 		StringBuilder binaryOut = new StringBuilder();
 		binaryOut.append(binaryInput.substring(1, n));
 		binaryOut.append(binaryInput.charAt(0));
+		return binaryOut.toString();		
+	}
+	public static String unshiftIt(String binaryInput) {
+		int n = binaryInput.length();
+		StringBuilder binaryOut = new StringBuilder();
+		binaryOut.append(binaryInput.charAt(n-1));
+		binaryOut.append(binaryInput.substring(0, n-1));
 		return binaryOut.toString();		
 	}
 	public static void permuteInt(int[] in) {
@@ -72,7 +97,7 @@ public class BinaryTools {
 			System.out.print(num + " ");
 		}
 	}
-	public static String permuteIt(String binaryInput) {
+	public static String unpermuteIt(String binaryInput) {
 		// uses permutation P to reorganize elements in a 32-bit binary string
 		if (binaryInput.length() != P.length) {
 			Troubleshooting.stringTooLongError(binaryInput.length(), 32);
@@ -83,7 +108,7 @@ public class BinaryTools {
 		}
 		return String.valueOf(binaryOut);
 	}
-	public static String unpermuteIt(String binaryInput) {
+	public static String permuteIt(String binaryInput) {
 		if (binaryInput.length() != P.length) {
 			Troubleshooting.stringTooLongError(binaryInput.length(), 32);
 		}
@@ -98,5 +123,27 @@ public class BinaryTools {
 		int row = Integer.parseInt(binaryInput.substring(0, 4), 2);
 		int column = Integer.parseInt(binaryInput.substring(4, 8), 2);
 		return S[row][column];
+	}
+	public static String unSubstitutionS(String binaryInput) {
+		for (int row = 0; row < 16; row++) {
+			for (int column = 0; column < 16; column++) {
+				if (S[row][column].equals(binaryInput)) {
+					return intToBinary(row) + intToBinary(column);
+	 			}
+			}
+		}
+		return null;
+	}
+	public static String intToBinary(int num) {
+		char[] binaryOut = new char[] {'0', '0', '0', '0'};
+		int pow2 = 8;
+		for (int i = 0; i < 4; i++) {
+			if (num % pow2 == 0) {
+				binaryOut[i] = '1';
+				num = num / pow2;
+			}
+			pow2 = pow2/2;
+		}
+		return String.valueOf(binaryOut);
 	}
 }
