@@ -22,6 +22,7 @@ public class EncryptionTools {
 		return BinaryTools.permuteIt(binaryOut);
 	}
 	public static String unfunctionF(String rightHalf, String subkey) {
+		// undoes a round function f transform
 		if (rightHalf.length() != subkey.length()) Troubleshooting.mismatchedError(rightHalf.length(), subkey.length());
 		if (rightHalf.length() != 32) Troubleshooting.stringTooLongError(rightHalf.length(), 32);
 		if (subkey.length() != 32) Troubleshooting.stringTooLongError(subkey.length(), 32);
@@ -43,6 +44,7 @@ public class EncryptionTools {
 		return L1 + R1;
 	}
 	public static String decryptBlockRound(String block, String inputKey) {
+		// completes one round of decryption
 		if (block.length() != 64) Troubleshooting.stringTooLongError(block.length(), 64);
 		String L1 = block.substring(0, 32);
 		String R1 = block.substring(32, 64);
@@ -52,6 +54,7 @@ public class EncryptionTools {
 		return L0 + R0;
 	}
 	public static String encryptBlock(String block, String inputKey) {
+		// completes 10 rounds of encryption
 		for (int i = 0; i < 10; i++) {
 			inputKey = keyScheduleTransform(inputKey);
 			block = encryptBlockRound(block, inputKey);
@@ -59,6 +62,7 @@ public class EncryptionTools {
 		return block;
 	}
 	public static String decryptBlock(String block, String inputKey) {
+		// completes 10 rounds of decryption by using subkeys in reverse order
 		String[] keys = new String[10];
 		for (int i = 0; i < 10; i++) {
 			inputKey = keyScheduleTransform(inputKey);
@@ -79,11 +83,24 @@ public class EncryptionTools {
 		return c1 + d1;
 	}
 	public static String encryption(String longBinaryInput, String inputKey) {
+		// encrypts a long binary string by separating into 64 bit blocks
 		String longBinaryOutput = "";
 		int start = 0;
 		int end = start + 64;
 		while (start != longBinaryInput.length()) {
 			longBinaryOutput += encryptBlock(longBinaryInput.substring(start, end), inputKey);
+			start += 64;
+			end += 64;
+		}
+		return longBinaryOutput;
+	}
+	public static String decryption(String longBinaryInput, String inputKey) {
+		// decrypts a long binary string by separating into 64 bit blocks
+		String longBinaryOutput = "";
+		int start = 0;
+		int end = start + 64;
+		while (start != longBinaryInput.length()) {
+			longBinaryOutput += decryptBlock(longBinaryInput.substring(start, end), inputKey);
 			start += 64;
 			end += 64;
 		}

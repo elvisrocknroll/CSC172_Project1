@@ -56,11 +56,10 @@ public class BinaryTools {
 		return binaryOut.toString();
 	}
 	public static String unxorIt(String xored, String key) {
+		// returns the second input of a XOR gate given the output and one input
 		StringBuilder binaryOut = new StringBuilder();
 		int n = xored.length();
-		if (n != xored.length()) {
-			Troubleshooting.mismatchedError(n, xored.length());
-		}
+		if (n != xored.length()) Troubleshooting.mismatchedError(n, xored.length());
 		for (int i = 0; i < n; i++) {
 			switch (xored.charAt(i)) {
 			case '0':
@@ -82,39 +81,32 @@ public class BinaryTools {
 		return binaryOut.toString();		
 	}
 	public static String unshiftIt(String binaryInput) {
+		// moves the first element of the binary string to the end
 		int n = binaryInput.length();
 		StringBuilder binaryOut = new StringBuilder();
 		binaryOut.append(binaryInput.charAt(n-1));
 		binaryOut.append(binaryInput.substring(0, n-1));
 		return binaryOut.toString();		
 	}
-	public static void permuteInt(int[] in) {
-		int[] out = new int[32];
-		for (int i = 0; i< 32; i++) {
-			out[P[i] - 1] = in[i];
-		}
-		for (int num : out) {
-			System.out.print(num + " ");
-		}
-	}
-	public static String unpermuteIt(String binaryInput) {
+	public static String permuteIt(String binaryInput) {
 		// uses permutation P to reorganize elements in a 32-bit binary string
 		if (binaryInput.length() != P.length) {
 			Troubleshooting.stringTooLongError(binaryInput.length(), 32);
 		}
 		char[] binaryOut = new char[32];
 		for (int i = 0; i < 32; i++) {
-			binaryOut[P[i] - 1] = binaryInput.charAt(i);
+			binaryOut[i] = binaryInput.charAt(P[i] - 1);
 		}
 		return String.valueOf(binaryOut);
 	}
-	public static String permuteIt(String binaryInput) {
+	public static String unpermuteIt(String binaryInput) {
+		// undoes permuted binary string with permutation P
 		if (binaryInput.length() != P.length) {
 			Troubleshooting.stringTooLongError(binaryInput.length(), 32);
 		}
 		char[] binaryOut = new char[32];
 		for (int i = 0; i < 32; i++) {
-			binaryOut[i] = binaryInput.charAt(P[i] - 1);
+			binaryOut[P[i] - 1] = binaryInput.charAt(i);
 		}
 		return String.valueOf(binaryOut);
 	}
@@ -125,6 +117,7 @@ public class BinaryTools {
 		return S[row][column];
 	}
 	public static String unSubstitutionS(String binaryInput) {
+		// returns the concatenated row and column indices for a given S-box cell
 		for (int row = 0; row < 16; row++) {
 			for (int column = 0; column < 16; column++) {
 				if (S[row][column].equals(binaryInput)) {
@@ -135,6 +128,7 @@ public class BinaryTools {
 		return null;
 	}
 	public static String intToBinary(int num) {
+		// converts an integer to a 4 bit binary string
 		char[] binaryOut = new char[] {'0', '0', '0', '0'};
 		int pow2 = 8;
 		for (int i = 0; i < 4; i++) {

@@ -1,4 +1,14 @@
 import proj1package.*;
+import java.util.Scanner;
+
+/*
+CSC 172 Project 1
+Class BinaryTools
+Elvis Imamura
+Tiffany Xiang
+
+main class, contains test cases and user input section
+*/
 
 public class Project1Main {
 
@@ -10,16 +20,49 @@ public class Project1Main {
 	
 	public static void main(String[] args) {
 		runTests();
+		userInput();
 	}
 	static void runTests() {
-		System.out.println(EncryptionTools.encryptBlock(allones64, allones64));
-		System.out.println(EncryptionTools.encryptBlock(allzeroes64, allones64));
-		System.out.println(EncryptionTools.encryptBlock(allzeroes64, allzeroes64));
-		System.out.println(EncryptionTools.encryptBlock(block1, allzeroes64));
-		System.out.println(EncryptionTools.decryptBlock(allones64, allones64));
-		System.out.println(EncryptionTools.decryptBlock(allzeroes64, allones64));
-		System.out.println(EncryptionTools.decryptBlock(allzeroes64, allzeroes64));
-		System.out.println(EncryptionTools.decryptBlock(block2, allones64));
-		System.out.println(EncryptionTools.decryptBlock(block3, allzeroes64));
+		// runs all specified tests
+		System.out.println("Output for: encryption(all ones, all ones)");
+		System.out.println(EncryptionTools.encryption(allones64, allones64));
+		System.out.println("Output for: encryption(all zeroes, all ones)");
+		System.out.println(EncryptionTools.encryption(allzeroes64, allones64));
+		System.out.println("Output for: encryption(all zeroes, all zeroes)");
+		System.out.println(EncryptionTools.encryption(allzeroes64, allzeroes64));
+		System.out.println("Output for: encryption(block, all zeroes), where:\nblock = " + block1);
+		System.out.println(EncryptionTools.encryption(block1, allzeroes64));
+		System.out.println("Output for: decryption(all ones, all ones)");
+		System.out.println(EncryptionTools.decryption(allones64, allones64));
+		System.out.println("Output for: decryption(all zeroes, all ones)");
+		System.out.println(EncryptionTools.decryption(allzeroes64, allones64));
+		System.out.println("Output for: decryption(all zeroes, all zeroes)");
+		System.out.println(EncryptionTools.decryption(allzeroes64, allzeroes64));
+		System.out.println("Output for: decryption(block, all ones), where:\nblock = " + block2);
+		System.out.println(EncryptionTools.decryption(block2, allones64));
+		System.out.println("Output for: decryption(block, all zeroes), where:\nblock = " + block3);
+		System.out.println(EncryptionTools.decryption(block3, allzeroes64));
+	}
+	static void userInput() {
+		// takes user input and performs encryption/decryption
+		Scanner s = new Scanner(System.in);
+		System.out.print("Do you want to encrypt or decrypt (E/D): ");
+		char mode = s.next().charAt(0);
+		System.out.print("Filename: ");
+		String infile = ReadWrite.readFile(s.next());
+		System.out.print("Secret key: ");
+		String key = s.next();
+		String crypt = "";
+		switch (mode) {
+			case 'E':
+				crypt = EncryptionTools.encryption(infile, key);	
+				break;
+			case 'D':
+				crypt = EncryptionTools.decryption(infile, key);	
+				break;
+		}
+		System.out.print("Output file: ");
+		String outfile = s.next();
+		ReadWrite.writeFile(outfile, crypt);
 	}
 }
