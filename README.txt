@@ -1,6 +1,6 @@
 CSC 172 Project 1
 Elvis Imamura
-Tiffany Xiang
+Tiffany Xiang 
 
 xorIt(binary1, binary2)
 shiftIt(binaryInput)
